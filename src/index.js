@@ -1,4 +1,10 @@
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  AppState,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 import { LoadFonts } from "./functions/LoadFonts";
 import { NavigationContainer } from "@react-navigation/native";
@@ -16,12 +22,7 @@ export default function App() {
     );
   }
 
-  return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Navigator />
-    </NavigationContainer>
-  );
+  return <Navigator />;
 }
 
 const styles = StyleSheet.create({

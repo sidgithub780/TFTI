@@ -1,13 +1,28 @@
 import { Button, TextInput } from "react-native-paper";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { StyleSheet, Text, TextInputComponent, View } from "react-native";
 
 import Screen from "../components/Screen";
 
-const LoginScreen = () => {
+import { auth } from "../firebase-config";
+import { signInWithEmailAndPassword } from "firebase/auth";
+
+const LoginScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const login = async () => {
+    try {
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log(user);
+      setLoading(false);
+      navigation.navigate("Home Screen");
+    } catch (e) {
+      alert(e.message);
+      setLoading(false);
+    }
+  };
 
   return (
     <Screen>
@@ -39,8 +54,9 @@ const LoginScreen = () => {
         loading={loading}
         style={{ marginTop: 20 }}
         uppercase={false}
-        onPress={() => {
+        onPress={async () => {
           setLoading(true);
+          await login();
         }}
       >
         <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>login</Text>

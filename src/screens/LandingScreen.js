@@ -7,9 +7,27 @@ import {
 } from "react-native";
 
 import Constants from "expo-constants";
-import React from "react";
+import React, { useEffect, useContext } from "react";
+
+import { AppStateContext } from "../context/Context";
+
+import { onAuthStateChanged } from "firebase/auth";
+
+import { auth } from "../firebase-config";
 
 const LandingScreen = ({ navigation }) => {
+  const { setUser } = useContext(AppStateContext);
+
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+      if (currentUser) {
+        navigation.navigate("Home Screen");
+      }
+    });
+    return unsub;
+  }, []);
+
   return (
     <View style={styles.container}>
       <View>
@@ -32,6 +50,7 @@ const LandingScreen = ({ navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Signup Screen");
+            setUser({ name: "bozo" });
           }}
           style={styles.buttonStyle}
         >
