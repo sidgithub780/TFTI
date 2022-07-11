@@ -71,11 +71,11 @@ const SignupScreen = ({ navigation }) => {
         } else {
           console.log("below is user email");
           console.log(user.email);
-          await deleteUserFromDB(signupEmail);
+          await deleteUserFromDB(signupEmail.toLowerCase());
           await deleteUser(user);
           alert("Newly created account has been deleted");
         }
-      }, 60 * 1000);
+      }, 10 * 1000);
       setEditable(true);
       //navigation.navigate("Home Screen");
     } catch (e) {
