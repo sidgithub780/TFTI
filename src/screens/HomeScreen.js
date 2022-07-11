@@ -9,16 +9,40 @@ import { signOut } from "firebase/auth";
 import { Button } from "react-native-paper";
 
 import { AppStateContext } from "../context/Context";
+import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+
+import { db } from "../firebase-config";
 
 const HomeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
 
+  const [userFromDB, setUserFromDB] = useState([]);
+
+  //const usersCollectionRef = collection(db, "users");
+
   const { user } = useContext(AppStateContext);
+
+  useEffect(() => {
+    const getUser = async () => {
+      const docRef = doc(db, "users", user.email);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+        setUserFromDB(docSnap.data().firstName);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
+    };
+
+    getUser();
+  }, []);
 
   return (
     <Screen>
       <Text style={{ fontFamily: "Axiforma-Regular" }}>
-        Welcome {user?.email}
+        Welcome {userFromDB}
       </Text>
       <Button
         mode="contained"

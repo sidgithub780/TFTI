@@ -14,10 +14,16 @@ const LoginScreen = ({ navigation }) => {
 
   const login = async () => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
+      let user = await signInWithEmailAndPassword(auth, email, password);
+      console.log("below is the signed in user");
       console.log(user);
+
+      if (user.user.emailVerified) {
+        navigation.navigate("Home Screen");
+      } else {
+        alert("Please verify email");
+      }
       setLoading(false);
-      navigation.navigate("Home Screen");
     } catch (e) {
       alert(e.message);
       setLoading(false);

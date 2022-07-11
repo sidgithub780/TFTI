@@ -21,8 +21,11 @@ const LandingScreen = ({ navigation }) => {
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
       if (currentUser) {
-        navigation.navigate("Home Screen");
+        if (currentUser.emailVerified) {
+          navigation.navigate("Home Screen");
+        }
       }
     });
     return unsub;
