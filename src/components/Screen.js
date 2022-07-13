@@ -9,7 +9,7 @@ const Screen = ({ children }) => {
 const styles = StyleSheet.create({
   container: {
     paddingTop:
-      Constants.statusBarHeight + Dimensions.get("window").height / 15,
+      Constants.statusBarHeight - 20 + Dimensions.get("window").height / 15,
     marginHorizontal: Dimensions.get("window").width / 12.5,
   },
 });

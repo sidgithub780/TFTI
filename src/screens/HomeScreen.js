@@ -1,22 +1,29 @@
-import { StyleSheet, Text, View } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 
 import Screen from "../components/Screen";
-
-import { auth } from "../firebase-config";
-import { signOut } from "firebase/auth";
-
-import { Button } from "react-native-paper";
 
 import { AppStateContext } from "../context/Context";
 import { collection, getDocs, getDoc, doc } from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
-const HomeScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
+import MyComponent from "../components/EventCard";
 
-  const [userFromDB, setUserFromDB] = useState([]);
+import { ActivityIndicator, IconButton } from "react-native-paper";
+
+import { Ionicons } from "@expo/vector-icons";
+
+const HomeScreen = ({ navigation }) => {
+  const [userFromDB, setUserFromDB] = useState({});
+  const [userEvents, setUserEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   //const usersCollectionRef = collection(db, "users");
 
@@ -28,40 +35,54 @@ const HomeScreen = ({ navigation }) => {
       const docSnap = await getDoc(docRef);
 
       if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        setUserFromDB(docSnap.data().firstName);
+        //console.log("Document data:", docSnap.data());
+        setUserFromDB(docSnap.data());
+        docSnap.data().events.map(async (eventID) => {
+          console.log(eventID.trim());
+          const eventRef = doc(db, "events", eventID);
+          const eventSnap = await getDoc(eventRef);
+          setUserEvents((current) => [...current, eventSnap.data()]);
+        });
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
       }
+      setLoading(false);
     };
 
     getUser();
+    console.log(userEvents);
   }, []);
 
   return (
     <Screen>
-      <Text style={{ fontFamily: "Axiforma-Regular" }}>
-        Welcome {userFromDB}
-      </Text>
-      <Button
-        mode="contained"
-        color="black"
-        loading={loading}
-        style={{ marginTop: 15 }}
-        uppercase={false}
-        onPress={async () => {
-          setLoading(true);
-          await signOut(auth);
-          console.log("logged out");
-          setLoading(false);
-          navigation.navigate("Landing Screen");
-        }}
-      >
-        <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-          sign out
-        </Text>
-      </Button>
+      {loading ? (
+        <ActivityIndicator animated={loading} />
+      ) : (
+        <View>
+          <View style={{ flexDirection: "row" }}>
+            <Text
+              style={{
+                fontFamily: "Axiforma-Bold",
+                fontSize: 25,
+              }}
+            >
+              {userFromDB.firstName}'s events
+            </Text>
+            <TouchableOpacity style={{ marginHorizontal: 30 }}>
+              <Ionicons name="reload" size={30} />
+            </TouchableOpacity>
+          </View>
+          <ScrollView>
+            {userEvents.map((event) => {
+              return <MyComponent event={event} />;
+            })}
+            <View>
+              <Text>{"\n \n \n \n"}</Text>
+            </View>
+          </ScrollView>
+        </View>
+      )}
     </Screen>
   );
 };

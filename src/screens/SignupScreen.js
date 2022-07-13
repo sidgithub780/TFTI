@@ -75,7 +75,7 @@ const SignupScreen = ({ navigation }) => {
           await deleteUser(user);
           alert("Newly created account has been deleted");
         }
-      }, 10 * 1000);
+      }, 60 * 1000);
       setEditable(true);
       //navigation.navigate("Home Screen");
     } catch (e) {
