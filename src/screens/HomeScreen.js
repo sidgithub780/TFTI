@@ -4,19 +4,20 @@ import {
   View,
   ScrollView,
   TouchableOpacity,
+  Modal,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 
 import Screen from "../components/Screen";
 
 import { AppStateContext } from "../context/Context";
-import { collection, getDocs, getDoc, doc } from "firebase/firestore";
+import { getDoc, doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
 import MyComponent from "../components/EventCard";
 
-import { ActivityIndicator, IconButton } from "react-native-paper";
+import { ActivityIndicator, TextInput, Button } from "react-native-paper";
 
 import { Ionicons } from "@expo/vector-icons";
 
@@ -24,12 +25,76 @@ const HomeScreen = ({ navigation }) => {
   const [userFromDB, setUserFromDB] = useState({});
   const [userEvents, setUserEvents] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  //const usersCollectionRef = collection(db, "users");
+  const [modalVisible, setModalVisible] = useState(false);
+  const [eventCode, setEventCode] = useState("");
+  const [userEventIDs, setUserEventIDs] = useState([]);
 
   const { user } = useContext(AppStateContext);
+  //const usersCollectionRef = collection(db, "users");
+
+  const reload = async () => {
+    setLoading(true);
+    const docRef = doc(db, "users", user.email);
+    const docSnap = await getDoc(docRef);
+
+    setUserFromDB({});
+    setUserEvents([]);
+    setUserEventIDs([]);
+
+    if (docSnap.exists()) {
+      //console.log("Document data:", docSnap.data());
+      setUserFromDB(docSnap.data());
+      docSnap.data().events.map(async (eventID) => {
+        console.log(eventID.trim());
+        setUserEventIDs((current) => [...current, eventID.trim()]);
+        const eventRef = doc(db, "events", eventID);
+        const eventSnap = await getDoc(eventRef);
+        setUserEvents((current) => [...current, eventSnap.data()]);
+      });
+    } else {
+      // doc.data() will be undefined in this case
+      console.log("No such document!");
+    }
+    setLoading(false);
+  };
+
+  const joinEvent = async () => {
+    if (eventCode.length !== 0) {
+      try {
+        const eventRef = doc(db, "events", eventCode.trim());
+        const eventSnap = await getDoc(eventRef);
+
+        if (eventSnap.exists()) {
+          const userRef = doc(db, "users", user.email);
+
+          let currentEvents = userEventIDs;
+          console.log("currentevents");
+          console.log(currentEvents);
+          currentEvents.push(eventCode.trim());
+
+          await updateDoc(userRef, {
+            events: currentEvents,
+          });
+
+          setEventCode("");
+
+          setUserEvents((current) => [...current, eventSnap.data()]);
+        } else {
+          alert("event does not exist");
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    } else {
+      alert("type in an event code...");
+    }
+
+    setModalVisible(false);
+  };
 
   useEffect(() => {
+    console.log("user events below");
+    console.log(user);
     const getUser = async () => {
       const docRef = doc(db, "users", user.email);
       const docSnap = await getDoc(docRef);
@@ -37,12 +102,16 @@ const HomeScreen = ({ navigation }) => {
       if (docSnap.exists()) {
         //console.log("Document data:", docSnap.data());
         setUserFromDB(docSnap.data());
-        docSnap.data().events.map(async (eventID) => {
-          console.log(eventID.trim());
-          const eventRef = doc(db, "events", eventID);
-          const eventSnap = await getDoc(eventRef);
-          setUserEvents((current) => [...current, eventSnap.data()]);
-        });
+
+        if (docSnap.data() !== undefined) {
+          docSnap.data().events.map(async (eventID) => {
+            console.log(eventID.trim());
+            setUserEventIDs((current) => [...current, eventID.trim()]);
+            const eventRef = doc(db, "events", eventID);
+            const eventSnap = await getDoc(eventRef);
+            setUserEvents((current) => [...current, eventSnap.data()]);
+          });
+        }
       } else {
         // doc.data() will be undefined in this case
         console.log("No such document!");
@@ -56,29 +125,128 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      {loading ? (
-        <ActivityIndicator animated={loading} />
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>enter event code:</Text>
+
+            <TextInput
+              mode="outlined"
+              label="event code"
+              outlineColor="black"
+              activeOutlineColor="black"
+              style={{ marginBottom: 15, marginTop: 5, width: "85%" }}
+              onChangeText={(code) => {
+                setEventCode(code);
+              }}
+              autoCapitalize="none"
+              autoCorrect={false}
+            />
+            <View style={{ flexDirection: "row" }}>
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+                style={{ marginHorizontal: 5 }}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  cancel
+                </Text>
+              </Button>
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                style={{ marginHorizontal: 5 }}
+                onPress={joinEvent}
+                loading={loading}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  submit
+                </Text>
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <View style={{ flexDirection: "row" }}>
+        <Text
+          style={{
+            fontFamily: "Axiforma-Bold",
+            fontSize: 25,
+          }}
+        >
+          {userFromDB.firstName}'s events
+        </Text>
+        <TouchableOpacity
+          style={{ marginHorizontal: 30 }}
+          onPress={async () => {
+            await reload();
+          }}
+        >
+          <Ionicons name="reload" size={30} />
+        </TouchableOpacity>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          marginVertical: 10,
+          justifyContent: "space-around",
+        }}
+      >
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          onPress={() => {
+            setModalVisible(!modalVisible);
+          }}
+          style={{ marginHorizontal: 5 }}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            join event
+          </Text>
+        </Button>
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          onPress={() => {
+            alert("ayo");
+          }}
+          style={{ marginHorizontal: 5 }}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            create event
+          </Text>
+        </Button>
+      </View>
+      {loading ? <ActivityIndicator animated={loading} /> : null}
+      {userEvents.length === 0 ? (
+        <View>
+          <Text style={{ fontFamily: "Axiforma-Regular" }}>
+            nothing to see here
+          </Text>
+        </View>
       ) : (
         <View>
-          <View style={{ flexDirection: "row" }}>
-            <Text
-              style={{
-                fontFamily: "Axiforma-Bold",
-                fontSize: 25,
-              }}
-            >
-              {userFromDB.firstName}'s events
-            </Text>
-            <TouchableOpacity style={{ marginHorizontal: 30 }}>
-              <Ionicons name="reload" size={30} />
-            </TouchableOpacity>
-          </View>
           <ScrollView>
             {userEvents.map((event) => {
               return <MyComponent event={event} />;
             })}
             <View>
-              <Text>{"\n \n \n \n"}</Text>
+              <Text>{"\n"}</Text>
             </View>
           </ScrollView>
         </View>
@@ -89,4 +257,40 @@ const HomeScreen = ({ navigation }) => {
 
 export default HomeScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: "85%",
+    height: "25%",
+  },
+
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 5,
+    textAlign: "center",
+    fontFamily: "Axiforma-Bold",
+    fontSize: 20,
+  },
+});

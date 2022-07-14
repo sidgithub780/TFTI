@@ -2,7 +2,9 @@ import * as React from "react";
 import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
 import { TouchableOpacity } from "react-native";
 
-const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
+const LeftContent = (props) => (
+  <Avatar.Icon {...props} icon="folder" color="white" backgroundColor="black" />
+);
 
 const MyComponent = (props) => (
   <TouchableOpacity>
@@ -32,7 +34,6 @@ const MyComponent = (props) => (
           not attending: {props.event.notAttending}
         </Title>
       </Card.Content>
-      <Card.Cover source={{ uri: "https://picsum.photos/700" }} />
     </Card>
   </TouchableOpacity>
 );

@@ -122,6 +122,8 @@ const SignupScreen = ({ navigation }) => {
           left={<TextInput.Icon name="email" />}
           onChangeText={(signupEmail) => setSignupEmail(signupEmail)}
           editable={editable}
+          autoCapitalize="none"
+          autoCorrect={false}
         />
 
         <TextInput
@@ -134,6 +136,7 @@ const SignupScreen = ({ navigation }) => {
           style={{ marginBottom: 15 }}
           onChangeText={(signupPassword) => setSignupPassword(signupPassword)}
           editable={editable}
+          autoCapitalize="none"
         />
 
         <Button
