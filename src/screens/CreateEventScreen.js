@@ -1,10 +1,18 @@
-import { StyleSheet, Text, View, KeyboardAvoidingView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  KeyboardAvoidingView,
+  ScrollView,
+  Modal,
+  FlatList,
+} from "react-native";
 import React, { useState, useContext } from "react";
 import { TextInput, Button } from "react-native-paper";
 
 import Screen from "../components/Screen";
 
-import DateTimePicker from "@react-native-community/datetimepicker";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 import { collection, addDoc, doc, updateDoc } from "firebase/firestore";
 
@@ -12,11 +20,15 @@ import { db } from "../firebase-config";
 
 import { AppStateContext } from "../context/Context";
 
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
 const CreateEventScreen = ({ route, navigation }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [modalVisible, setModalVisible] = useState(false);
+  const [eventLocation, setEventLocation] = useState("");
 
   const { user } = useContext(AppStateContext);
 
@@ -35,6 +47,7 @@ const CreateEventScreen = ({ route, navigation }) => {
         >
           make an event to invite people to your event
         </Text>
+
         <Text
           style={{
             fontFamily: "Axiforma-Regular",
@@ -59,7 +72,7 @@ const CreateEventScreen = ({ route, navigation }) => {
           style={{
             fontFamily: "Axiforma-Regular",
             fontSize: 15,
-            marginTop: 20,
+            marginTop: 10,
           }}
         >
           event description
@@ -78,6 +91,56 @@ const CreateEventScreen = ({ route, navigation }) => {
           }}
         />
 
+        <View style={{ flexDirection: "row" }}>
+          <Text
+            style={{
+              fontFamily: "Axiforma-Regular",
+              fontSize: 15,
+              marginTop: 10,
+            }}
+          >
+            event location: {eventLocation}
+          </Text>
+
+          <Modal
+            presentationStyle="pageSheet"
+            visible={modalVisible}
+            onRequestClose={() => setModalVisible(false)}
+            style={{ backgroundColor: "black" }}
+            animationType="slide"
+          >
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                setEventLocation(data.description);
+                setModalVisible(false);
+              }}
+              query={{
+                key: "AIzaSyCjFx3bl1QEtoFoVF1zs0asjwDyKpuPJCI",
+                language: "en",
+              }}
+              style={{ marginTop: 30 }}
+            />
+          </Modal>
+        </View>
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          onPress={async () => {
+            try {
+              setModalVisible(true);
+            } catch (e) {
+              console.log(e);
+            }
+          }}
+          style={{ marginHorizontal: 20, marginTop: 20 }}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            set location
+          </Text>
+        </Button>
         <Text
           style={{
             fontFamily: "Axiforma-Regular",
@@ -87,11 +150,11 @@ const CreateEventScreen = ({ route, navigation }) => {
         >
           start time:
         </Text>
-        <DateTimePicker
+        <RNDateTimePicker
           value={startDate}
           mode="datetime"
-          onChange={(startDate) => {
-            setStartDate(startDate);
+          onChange={(event, date) => {
+            setStartDate(date);
           }}
         />
         <Text
@@ -103,11 +166,11 @@ const CreateEventScreen = ({ route, navigation }) => {
         >
           end time:
         </Text>
-        <DateTimePicker
+        <RNDateTimePicker
           value={endDate}
           mode="datetime"
-          onChange={(endDate) => {
-            setEndDate(endDate);
+          onChange={(event, date) => {
+            setEndDate(date);
           }}
         />
         <Button
@@ -124,6 +187,7 @@ const CreateEventScreen = ({ route, navigation }) => {
                 attending: 1,
                 maybeAttending: 0,
                 notAttending: 0,
+                location: eventLocation,
               });
               console.log(docRef.id);
               console.log(user);
@@ -150,7 +214,6 @@ const CreateEventScreen = ({ route, navigation }) => {
             create event
           </Text>
         </Button>
-        <Text>{JSON.stringify(route.params.ids)}</Text>
       </Screen>
     </KeyboardAvoidingView>
   );

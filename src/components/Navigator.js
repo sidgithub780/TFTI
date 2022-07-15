@@ -41,7 +41,7 @@ const Navigator = () => {
   const Main = () => {
     return (
       <Tab.Navigator
-        initialRouteName="HomeToCreate"
+        initialRouteName="Home Tab"
         screenOptions={{ tabBarColor: "transparent" }}
       >
         <Tab.Screen
@@ -50,7 +50,7 @@ const Navigator = () => {
           options={{ headerShown: false }}
         />
         <Tab.Screen
-          name="HomeToCreate"
+          name="Home Tab"
           component={HomeToCreate}
           options={{ headerShown: false }}
         />

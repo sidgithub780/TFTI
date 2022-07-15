@@ -240,16 +240,13 @@ const HomeScreen = ({ navigation }) => {
           </Text>
         </View>
       ) : (
-        <View>
-          <ScrollView>
-            {userEvents.map((event) => {
-              return <MyComponent event={event} />;
-            })}
-            <View>
-              <Text>{"\n"}</Text>
-            </View>
-          </ScrollView>
-        </View>
+        <ScrollView>
+          {userEvents.map((event) => {
+            return <MyComponent event={event} />;
+          })}
+
+          <Text>{"\n \n \n \n \n \n"}</Text>
+        </ScrollView>
       )}
     </Screen>
   );

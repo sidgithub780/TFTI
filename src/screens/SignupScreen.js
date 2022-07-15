@@ -38,6 +38,7 @@ const SignupScreen = ({ navigation }) => {
       lastName: lastName.toLowerCase(),
       note: "",
       password: signupPassword,
+      events: [],
     });
   };
 
