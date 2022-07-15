@@ -223,7 +223,7 @@ const HomeScreen = ({ navigation }) => {
           color="black"
           uppercase={false}
           onPress={() => {
-            alert("ayo");
+            navigation.navigate("Create", { ids: userEventIDs });
           }}
           style={{ marginHorizontal: 5 }}
         >

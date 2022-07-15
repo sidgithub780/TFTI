@@ -21,17 +21,17 @@ const MyComponent = (props) => (
       }}
     >
       <Card.Title
-        title={props.event.title}
-        subtitle={props.event.description}
+        title={props.event?.title}
+        subtitle={props.event?.description}
         left={LeftContent}
         style={{ fontFamily: "Axiforma-Regular" }}
       />
       <Card.Content>
         <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
-          attending: {props.event.attending}
+          attending: {props.event?.attending}
         </Title>
         <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
-          not attending: {props.event.notAttending}
+          not attending: {props.event?.notAttending}
         </Title>
       </Card.Content>
     </Card>

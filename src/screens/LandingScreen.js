@@ -36,7 +36,7 @@ const LandingScreen = ({ navigation }) => {
       <View>
         <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 40 }}>tfti</Text>
         <Text style={{ fontFamily: "Axiforma-Regular", fontSize: 30 }}>
-          thanks for the invite
+          events made easy
         </Text>
       </View>
       <View style={styles.buttonGroup}>
