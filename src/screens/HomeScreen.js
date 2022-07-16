@@ -64,10 +64,10 @@ const HomeScreen = ({ navigation }) => {
         const eventRef = doc(db, "events", eventCode.trim());
         const eventSnap = await getDoc(eventRef);
 
-        console.log("members below");
-        console.log(eventSnap.data().members);
+        if (eventSnap.data() !== undefined) {
+          console.log("members below");
+          console.log(eventSnap.data().members);
 
-        if (eventSnap.exists()) {
           const userRef = doc(db, "users", user.email);
 
           let currentEvents = userEventIDs;
@@ -76,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
           currentEvents.push(eventCode.trim());
 
           let currentMembers = eventSnap.data().members;
-          currentMembers.push(user.email);
+          currentMembers.push({ email: user.email, attending: "maybe" });
 
           await updateDoc(eventRef, {
             members: currentMembers,
@@ -90,7 +90,7 @@ const HomeScreen = ({ navigation }) => {
 
           setUserEvents((current) => [...current, eventSnap.data()]);
         } else {
-          alert("event does not exist");
+          alert("no event exists");
         }
       } catch (e) {
         console.log(e);
@@ -103,8 +103,6 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log("user events below");
-    console.log(user);
     const getUser = async () => {
       const docRef = doc(db, "users", user.email);
       const docSnap = await getDoc(docRef);
@@ -130,7 +128,8 @@ const HomeScreen = ({ navigation }) => {
     };
 
     getUser();
-    console.log(userEvents);
+    console.log("below is user from db");
+    console.log(userFromDB);
   }, []);
 
   return (
@@ -233,7 +232,10 @@ const HomeScreen = ({ navigation }) => {
           color="black"
           uppercase={false}
           onPress={() => {
-            navigation.navigate("Create", { ids: userEventIDs, user: user });
+            navigation.navigate("Create", {
+              ids: userEventIDs,
+              user: userFromDB,
+            });
           }}
           style={{ marginHorizontal: 5 }}
         >
@@ -256,8 +258,9 @@ const HomeScreen = ({ navigation }) => {
               <TouchableOpacity
                 onPress={() => {
                   navigation.navigate("EventOptions", {
-                    user: user,
+                    user: userFromDB,
                     event: event,
+                    eventID: userEventIDs[userEvents.indexOf(event)],
                   });
                 }}
               >

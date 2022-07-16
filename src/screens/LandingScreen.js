@@ -22,14 +22,11 @@ const LandingScreen = ({ navigation }) => {
   const { setUser } = useContext(AppStateContext);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (currentUser) => {
-      console.log(currentUser);
+    const unsub = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
 
       if (currentUser) {
         if (currentUser.emailVerified) {
-          const docRef = doc(db, "users", currentUser.email);
-          const docSnap = await getDoc(docRef);
-          setUser(docSnap.data());
           navigation.navigate("Home Screen");
         }
       }

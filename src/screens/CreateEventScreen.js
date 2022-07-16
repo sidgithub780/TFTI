@@ -7,7 +7,7 @@ import {
   Modal,
   FlatList,
 } from "react-native";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { TextInput, Button } from "react-native-paper";
 
 import Screen from "../components/Screen";
@@ -29,8 +29,6 @@ const CreateEventScreen = ({ route, navigation }) => {
   const [endDate, setEndDate] = useState(new Date());
   const [modalVisible, setModalVisible] = useState(false);
   const [eventLocation, setEventLocation] = useState("");
-
-  const { user } = useContext(AppStateContext);
 
   return (
     <KeyboardAvoidingView>
@@ -191,12 +189,14 @@ const CreateEventScreen = ({ route, navigation }) => {
                 transparent: false,
                 collaborative: false,
                 proposals: [],
-                members: [{ email: route.params.user.email, attending: "y" }],
+                members: [
+                  { email: route.params.user.email, attending: "attending" },
+                ],
+                admins: [route.params.user.email],
               });
               console.log(docRef.id);
-              console.log(user);
 
-              const userRef = doc(db, "users", user.email);
+              const userRef = doc(db, "users", route.params.user.email);
 
               let currentEvents = route.params.ids;
               console.log("currentevents");
@@ -218,7 +218,6 @@ const CreateEventScreen = ({ route, navigation }) => {
             create event
           </Text>
         </Button>
-        <Text>{JSON.stringify(route.params.user)}</Text>
       </Screen>
     </KeyboardAvoidingView>
   );

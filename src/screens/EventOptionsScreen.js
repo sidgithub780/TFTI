@@ -3,16 +3,63 @@ import React, { useEffect } from "react";
 
 import Screen from "../components/Screen";
 
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
+import {
+  Avatar,
+  Button,
+  Card,
+  Title,
+  Paragraph,
+  ToggleButton,
+} from "react-native-paper";
 
 import Constants from "expo-constants";
+
+import ButtonToggleGroup from "react-native-button-toggle-group";
+
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+
+import { db } from "../firebase-config";
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 const EventOptionsScreen = ({ route }) => {
+  const [value, setValue] = React.useState("maybe");
+
   useEffect(() => {
-    console.log(route.params.user);
+    const load = async () => {
+      const eventRef = doc(db, "events", route.params.eventID);
+      const eventSnap = await getDoc(eventRef);
+
+      if (eventSnap.data() !== undefined) {
+        eventSnap.data().members.map((member) => {
+          console.log(member.email);
+          if (member.email === route.params.user.email) {
+            console.log("we in");
+            setValue(member.attending);
+          }
+        });
+      }
+    };
+    load();
   }, []);
+
+  const confirmSelection = async () => {
+    const eventRef = doc(db, "events", route.params.eventID);
+    const eventSnap = await getDoc(eventRef);
+    console.log(eventSnap.data().members);
+    let tempMembers = eventSnap.data().members;
+    tempMembers.map((member) => {
+      console.log(member.email);
+      if (member.email === route.params.user.email) {
+        console.log("we in");
+        member.attending = value;
+      }
+    });
+    await updateDoc(eventRef, {
+      members: tempMembers,
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View>
@@ -24,14 +71,15 @@ const EventOptionsScreen = ({ route }) => {
         >
           {route.params.event.title}
         </Text>
-        <Card style={{ marginTop: 20 }}>
+        <Text>{route.params.eventID}</Text>
+        <Card style={{ marginTop: 20, padding: 10 }}>
           <Card.Title
             title="details"
             subtitle="view title, description, and settings"
             left={LeftContent}
           />
         </Card>
-        <Card style={{ marginTop: 20 }}>
+        <Card style={{ marginTop: 20, padding: 10 }}>
           <Card.Title
             title="members"
             subtitle="view members"
@@ -39,15 +87,46 @@ const EventOptionsScreen = ({ route }) => {
           />
         </Card>
       </View>
-      <View>
+
+      <View style={{ marginBottom: 40 }}>
         <Text
           style={{
             fontFamily: "Axiforma-Bold",
             fontSize: 25,
+            marginBottom: 20,
           }}
         >
           change attendance status
         </Text>
+        <Text
+          style={{
+            fontFamily: "Axiforma-Regular",
+            fontSize: 15,
+            marginBottom: 20,
+          }}
+        >
+          currently selected: {value}
+        </Text>
+        <ButtonToggleGroup
+          highlightBackgroundColor={"#5626CE"}
+          highlightTextColor={"white"}
+          inactiveBackgroundColor={"transparent"}
+          inactiveTextColor={"grey"}
+          values={["not attending", "maybe", "attending"]}
+          value={value}
+          onSelect={(val) => setValue(val)}
+        />
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          style={{ marginHorizontal: 5, marginTop: 25 }}
+          onPress={confirmSelection}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            confirm selection
+          </Text>
+        </Button>
       </View>
     </View>
   );
