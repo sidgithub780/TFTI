@@ -188,6 +188,10 @@ const CreateEventScreen = ({ route, navigation }) => {
                 maybeAttending: 0,
                 notAttending: 0,
                 location: eventLocation,
+                transparent: false,
+                collaborative: false,
+                proposals: [],
+                members: [{ email: route.params.user.email, attending: "y" }],
               });
               console.log(docRef.id);
               console.log(user);
@@ -214,6 +218,7 @@ const CreateEventScreen = ({ route, navigation }) => {
             create event
           </Text>
         </Button>
+        <Text>{JSON.stringify(route.params.user)}</Text>
       </Screen>
     </KeyboardAvoidingView>
   );

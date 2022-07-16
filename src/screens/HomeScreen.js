@@ -64,6 +64,9 @@ const HomeScreen = ({ navigation }) => {
         const eventRef = doc(db, "events", eventCode.trim());
         const eventSnap = await getDoc(eventRef);
 
+        console.log("members below");
+        console.log(eventSnap.data().members);
+
         if (eventSnap.exists()) {
           const userRef = doc(db, "users", user.email);
 
@@ -71,6 +74,13 @@ const HomeScreen = ({ navigation }) => {
           console.log("currentevents");
           console.log(currentEvents);
           currentEvents.push(eventCode.trim());
+
+          let currentMembers = eventSnap.data().members;
+          currentMembers.push(user.email);
+
+          await updateDoc(eventRef, {
+            members: currentMembers,
+          });
 
           await updateDoc(userRef, {
             events: currentEvents,
@@ -101,9 +111,9 @@ const HomeScreen = ({ navigation }) => {
 
       if (docSnap.exists()) {
         //console.log("Document data:", docSnap.data());
-        setUserFromDB(docSnap.data());
 
         if (docSnap.data() !== undefined) {
+          setUserFromDB(docSnap.data());
           docSnap.data().events.map(async (eventID) => {
             console.log(eventID.trim());
             setUserEventIDs((current) => [...current, eventID.trim()]);
@@ -223,7 +233,7 @@ const HomeScreen = ({ navigation }) => {
           color="black"
           uppercase={false}
           onPress={() => {
-            navigation.navigate("Create", { ids: userEventIDs });
+            navigation.navigate("Create", { ids: userEventIDs, user: user });
           }}
           style={{ marginHorizontal: 5 }}
         >
@@ -242,7 +252,18 @@ const HomeScreen = ({ navigation }) => {
       ) : (
         <ScrollView>
           {userEvents.map((event) => {
-            return <MyComponent event={event} />;
+            return (
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("EventOptions", {
+                    user: user,
+                    event: event,
+                  });
+                }}
+              >
+                <MyComponent event={event} />
+              </TouchableOpacity>
+            );
           })}
 
           <Text>{"\n \n \n \n \n \n"}</Text>

@@ -15,15 +15,21 @@ import { onAuthStateChanged } from "firebase/auth";
 
 import { auth } from "../firebase-config";
 
+import { getDoc, doc } from "firebase/firestore";
+import { db } from "../firebase-config";
+
 const LandingScreen = ({ navigation }) => {
   const { setUser } = useContext(AppStateContext);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsub = onAuthStateChanged(auth, async (currentUser) => {
+      console.log(currentUser);
 
       if (currentUser) {
         if (currentUser.emailVerified) {
+          const docRef = doc(db, "users", currentUser.email);
+          const docSnap = await getDoc(docRef);
+          setUser(docSnap.data());
           navigation.navigate("Home Screen");
         }
       }
