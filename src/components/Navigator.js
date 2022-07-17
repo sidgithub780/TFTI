@@ -5,6 +5,8 @@ import SignupScreen from "../screens/SignupScreen";
 import AccountScreen from "../screens/AccountScreen";
 import CreateEventScreen from "../screens/CreateEventScreen";
 import EventOptionsScreen from "../screens/EventOptionsScreen";
+import EventDetailsScreen from "../screens/EventDetailsScreen";
+import EventMembersScreen from "../screens/EventMembersScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -33,6 +35,16 @@ const HomeToCreate = () => {
       <Stack.Screen
         name="EventOptions"
         component={EventOptionsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EventDetails"
+        component={EventDetailsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EventMembers"
+        component={EventMembersScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

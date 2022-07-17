@@ -1,16 +1,13 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React, { useEffect } from "react";
 
-import Screen from "../components/Screen";
-
-import {
-  Avatar,
-  Button,
-  Card,
-  Title,
-  Paragraph,
-  ToggleButton,
-} from "react-native-paper";
+import { Avatar, Button, Card } from "react-native-paper";
 
 import Constants from "expo-constants";
 
@@ -20,9 +17,11 @@ import { doc, updateDoc, getDoc } from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
+import * as Clipboard from "expo-clipboard";
+
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
-const EventOptionsScreen = ({ route }) => {
+const EventOptionsScreen = ({ route, navigation }) => {
   const [value, setValue] = React.useState("maybe");
 
   useEffect(() => {
@@ -71,21 +70,47 @@ const EventOptionsScreen = ({ route }) => {
         >
           {route.params.event.title}
         </Text>
-        <Text>{route.params.eventID}</Text>
-        <Card style={{ marginTop: 20, padding: 10 }}>
-          <Card.Title
-            title="details"
-            subtitle="view title, description, and settings"
-            left={LeftContent}
-          />
-        </Card>
-        <Card style={{ marginTop: 20, padding: 10 }}>
-          <Card.Title
-            title="members"
-            subtitle="view members"
-            left={LeftContent}
-          />
-        </Card>
+
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          style={{ marginHorizontal: 5, marginTop: 10, width: "50%" }}
+          onPress={async () => {
+            await Clipboard.setStringAsync(route.params.eventID);
+            alert("Copied");
+          }}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            copy id
+          </Text>
+        </Button>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("EventDetails");
+          }}
+        >
+          <Card style={{ marginTop: 20, padding: 10 }}>
+            <Card.Title
+              title="details"
+              subtitle="view title, description, and settings"
+              left={LeftContent}
+            />
+          </Card>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("EventMembers", { event: route.params.event });
+          }}
+        >
+          <Card style={{ marginTop: 20, padding: 10 }}>
+            <Card.Title
+              title="members"
+              subtitle="view members"
+              left={LeftContent}
+            />
+          </Card>
+        </TouchableOpacity>
       </View>
 
       <View style={{ marginBottom: 40 }}>
