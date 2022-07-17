@@ -21,6 +21,8 @@ import { ActivityIndicator, TextInput, Button } from "react-native-paper";
 
 import { Ionicons } from "@expo/vector-icons";
 
+import uuid from "react-native-uuid";
+
 const HomeScreen = ({ navigation }) => {
   const [userFromDB, setUserFromDB] = useState({});
   const [userEvents, setUserEvents] = useState([]);
@@ -103,6 +105,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log(uuid.v4());
     const getUser = async () => {
       const docRef = doc(db, "users", user.email);
       const docSnap = await getDoc(docRef);
@@ -264,7 +267,11 @@ const HomeScreen = ({ navigation }) => {
                   });
                 }}
               >
-                <MyComponent event={event} />
+                <MyComponent
+                  event={event}
+                  user={userFromDB}
+                  eventID={userEventIDs[userEvents.indexOf(event)]}
+                />
               </TouchableOpacity>
             );
           })}
