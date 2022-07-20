@@ -87,7 +87,7 @@ const EventOptionsScreen = ({ route, navigation }) => {
         </Button>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("EventDetails");
+            navigation.navigate("EventDetails", { event: route.params.event });
           }}
         >
           <Card style={{ marginTop: 20, padding: 10 }}>
