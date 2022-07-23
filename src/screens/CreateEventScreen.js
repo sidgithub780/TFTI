@@ -31,7 +31,7 @@ const CreateEventScreen = ({ route, navigation }) => {
   const [eventLocation, setEventLocation] = useState("");
 
   return (
-    <KeyboardAvoidingView>
+    <ScrollView>
       <Screen>
         <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 25 }}>
           create event
@@ -219,7 +219,7 @@ const CreateEventScreen = ({ route, navigation }) => {
           </Text>
         </Button>
       </Screen>
-    </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 

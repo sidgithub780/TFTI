@@ -113,7 +113,7 @@ const EventOptionsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={{ marginBottom: 40 }}>
+      <View style={{ marginBottom: 0 }}>
         <Text
           style={{
             fontFamily: "Axiforma-Bold",
@@ -140,6 +140,14 @@ const EventOptionsScreen = ({ route, navigation }) => {
           values={["not attending", "maybe", "attending"]}
           value={value}
           onSelect={(val) => setValue(val)}
+          style={{
+            borderWidth: 1,
+            borderColor: "gray",
+            borderRadius: 10,
+            padding: 5,
+            height: "20%",
+          }}
+          textStyle={{ fontFamily: "Axiforma-Regular" }}
         />
         <Button
           mode="contained"

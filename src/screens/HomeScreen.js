@@ -227,7 +227,7 @@ const HomeScreen = ({ navigation }) => {
           style={{ marginHorizontal: 5 }}
         >
           <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-            join event
+            join
           </Text>
         </Button>
         <Button
@@ -243,7 +243,7 @@ const HomeScreen = ({ navigation }) => {
           style={{ marginHorizontal: 5 }}
         >
           <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-            create event
+            create
           </Text>
         </Button>
       </View>
@@ -290,13 +290,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    marginTop: 10,
   },
   modalView: {
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
+    padding: 15,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: {
@@ -307,7 +307,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: "85%",
-    height: "25%",
   },
 
   textStyle: {
@@ -316,7 +315,6 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   modalText: {
-    marginBottom: 5,
     textAlign: "center",
     fontFamily: "Axiforma-Bold",
     fontSize: 20,
