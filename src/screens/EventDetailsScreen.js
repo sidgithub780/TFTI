@@ -3,7 +3,7 @@ import React, { useState } from "react";
 
 import Screen from "../components/Screen";
 
-import { Switch, Divider } from "react-native-paper";
+import { Switch, Divider, Button } from "react-native-paper";
 
 import Constants from "expo-constants";
 
@@ -57,7 +57,7 @@ const EventDetailsScreen = ({ route }) => {
       </View>
       <View style={{ marginBottom: 40 }}>
         <View style={{ flexDirection: "row", marginTop: 30 }}>
-          <Text style={styles.normalStyle}>transparency mode:</Text>
+          <Text style={styles.toggleText}>transparency mode:</Text>
           <Switch
             value={isSwitchOn}
             onValueChange={onToggleSwitch}
@@ -65,13 +65,26 @@ const EventDetailsScreen = ({ route }) => {
           />
         </View>
         <View style={{ flexDirection: "row", marginTop: 30 }}>
-          <Text style={styles.normalStyle}>collaborative mode:</Text>
+          <Text style={styles.toggleText}>collaborative mode:</Text>
           <Switch
             value={isSwitchOn1}
             onValueChange={onToggleSwitch1}
             style={{ marginHorizontal: 10 }}
           />
         </View>
+        <Button
+          mode="contained"
+          color="black"
+          uppercase={false}
+          style={{ marginTop: 30 }}
+          onPress={() => {
+            alert("sheesh");
+          }}
+        >
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            confirm
+          </Text>
+        </Button>
       </View>
     </View>
   );
@@ -92,5 +105,9 @@ const styles = StyleSheet.create({
     marginHorizontal: Dimensions.get("window").width / 12.5,
     flex: 1,
     justifyContent: "space-between",
+  },
+  toggleText: {
+    fontFamily: "Axiforma-Regular",
+    fontSize: 20,
   },
 });

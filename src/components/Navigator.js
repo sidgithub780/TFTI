@@ -27,7 +27,15 @@ const HomeToCreate = () => {
         component={HomeScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="Create" component={CreateEventScreen} />
+      <Stack.Screen
+        name="Create"
+        component={CreateEventScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "back",
+          headerTitle: "",
+        }}
+      />
       <Stack.Screen
         name="EventOptions"
         component={EventOptionsScreen}
