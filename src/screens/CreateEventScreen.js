@@ -6,6 +6,7 @@ import {
   ScrollView,
   Modal,
   FlatList,
+  Platform,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 import { TextInput, Button } from "react-native-paper";
@@ -30,6 +31,42 @@ const CreateEventScreen = ({ route, navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [eventLocation, setEventLocation] = useState("");
 
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [show1, setShow1] = useState(false);
+
+  const onChange = (event, selectedDate, type) => {
+    const currentDate = selectedDate || startDate;
+    setShow(Platform.OS === "ios");
+
+    setStartDate(currentDate);
+  };
+
+  const onChange1 = (event, selectedDate, type) => {
+    const currentDate = selectedDate || endDate;
+    setShow1(Platform.OS === "ios");
+
+    setEndDate(currentDate);
+  };
+
+  const showMode = (currentMode, currentSelection) => {
+    if (currentSelection === "start") {
+      setShow(true);
+    } else if (currentSelection === "end") {
+      setShow1(true);
+    }
+
+    setMode(currentMode);
+  };
+
+  const showDatepicker = (currentSelection) => {
+    showMode("date", currentSelection);
+  };
+
+  const showTimepicker = (currentSelection) => {
+    showMode("time", currentSelection);
+  };
+
   return (
     <ScrollView>
       <Screen>
@@ -46,6 +83,22 @@ const CreateEventScreen = ({ route, navigation }) => {
           make an event to invite people to your event
         </Text>
 
+        {show && (
+          <RNDateTimePicker
+            value={startDate}
+            mode={mode}
+            display="default"
+            onChange={onChange}
+          />
+        )}
+        {show1 && (
+          <RNDateTimePicker
+            value={endDate}
+            mode={mode}
+            display="default"
+            onChange={onChange1}
+          />
+        )}
         <Text
           style={{
             fontFamily: "Axiforma-Regular",
@@ -139,38 +192,110 @@ const CreateEventScreen = ({ route, navigation }) => {
             set location
           </Text>
         </Button>
-        <Text
-          style={{
-            fontFamily: "Axiforma-Regular",
-            fontSize: 15,
-            marginTop: 20,
-          }}
-        >
-          start time:
-        </Text>
-        <RNDateTimePicker
-          value={startDate}
-          mode="datetime"
-          onChange={(event, date) => {
-            setStartDate(date);
-          }}
-        />
-        <Text
-          style={{
-            fontFamily: "Axiforma-Regular",
-            fontSize: 15,
-            marginTop: 30,
-          }}
-        >
-          end time:
-        </Text>
-        <RNDateTimePicker
-          value={endDate}
-          mode="datetime"
-          onChange={(event, date) => {
-            setEndDate(date);
-          }}
-        />
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <Text
+            style={{
+              fontFamily: "Axiforma-Regular",
+              fontSize: 15,
+              marginTop: 20,
+            }}
+          >
+            start time:
+          </Text>
+
+          {Platform.OS === "android" ? (
+            <>
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                onPress={() => {
+                  showDatepicker("start");
+                }}
+                style={{ marginHorizontal: 10 }}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  date
+                </Text>
+              </Button>
+
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                onPress={() => {
+                  showTimepicker("start");
+                }}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  time
+                </Text>
+              </Button>
+            </>
+          ) : null}
+        </View>
+        {Platform.OS === "ios" ? (
+          <RNDateTimePicker
+            value={startDate}
+            mode="datetime"
+            onChange={(event, date) => {
+              setStartDate(date);
+            }}
+          />
+        ) : null}
+
+        <View style={{ flexDirection: "row", marginTop: 10 }}>
+          <Text
+            style={{
+              fontFamily: "Axiforma-Regular",
+              fontSize: 15,
+              marginTop: 20,
+            }}
+          >
+            end time:
+          </Text>
+
+          {Platform.OS === "android" ? (
+            <>
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                onPress={() => {
+                  showDatepicker("end");
+                }}
+                style={{ marginHorizontal: 10 }}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  date
+                </Text>
+              </Button>
+
+              <Button
+                mode="contained"
+                color="black"
+                uppercase={false}
+                onPress={() => {
+                  showTimepicker("end");
+                }}
+              >
+                <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                  time
+                </Text>
+              </Button>
+            </>
+          ) : null}
+        </View>
+        {Platform.OS === "ios" ? (
+          <RNDateTimePicker
+            value={endDate}
+            mode="datetime"
+            onChange={(event, date) => {
+              setEndDate(date);
+            }}
+          />
+        ) : null}
+
         <Button
           mode="contained"
           color="black"
