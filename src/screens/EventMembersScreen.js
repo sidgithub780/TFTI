@@ -22,7 +22,12 @@ const EventMembersScreen = ({ route }) => {
       </Text>
 
       {route.params.event.members.map((member) => {
-        return <MemberCard member={member} />;
+        return (
+          <MemberCard
+            member={member}
+            transparent={route.params.event.transparent}
+          />
+        );
       })}
     </Screen>
   );

@@ -68,7 +68,16 @@ const MyComponent = (props) => (
       <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
         {props.event?.description}
       </Title>
-      <Title style={{ fontSize: 15 }}>
+      {props.event?.transparency ? (
+        <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
+          Transparent
+        </Title>
+      ) : (
+        <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
+          Not transparent
+        </Title>
+      )}
+      <Title style={{ fontSize: 15, fontFamily: "Axiforma-Regular" }}>
         {new Date(props.event.startDate.seconds * 1000).toLocaleDateString(
           "en-US"
         )}

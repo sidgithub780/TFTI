@@ -13,7 +13,18 @@ const AccountScreen = ({ navigation }) => {
 
   return (
     <Screen>
-      <Text>AccountScreen</Text>
+      <Text
+        style={{
+          fontFamily: "Axiforma-Regular",
+          fontSize: 20,
+          marginBottom: 5,
+        }}
+      >
+        welcome
+      </Text>
+      <Text style={{ fontFamily: "Axiforma-Regular", fontSize: 25 }}>
+        welcome
+      </Text>
       <Button
         mode="contained"
         color="black"

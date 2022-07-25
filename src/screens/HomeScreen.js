@@ -105,6 +105,7 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
+    console.log(user);
     console.log(uuid.v4());
     const getUser = async () => {
       const docRef = doc(db, "users", user.email);

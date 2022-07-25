@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import Screen from "../components/Screen";
 
@@ -7,12 +7,32 @@ import { Switch, Divider, Button } from "react-native-paper";
 
 import Constants from "expo-constants";
 
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+
+import { db } from "../firebase-config";
+
+import { AppStateContext } from "../context/Context";
+
 const EventDetailsScreen = ({ route }) => {
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-  const [isSwitchOn1, setIsSwitchOn1] = React.useState(false);
+  const { user } = useContext(AppStateContext);
+
+  const [isSwitchOn, setIsSwitchOn] = React.useState(
+    route.params.event.transparent
+  );
+  const [isSwitchOn1, setIsSwitchOn1] = React.useState(
+    route.params.event.collaborative
+  );
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   const onToggleSwitch1 = () => setIsSwitchOn1(!isSwitchOn1);
+
+  const handleConfirm = async () => {
+    const eventRef = doc(db, "events", route.params.eventID);
+    await updateDoc(eventRef, {
+      transparent: isSwitchOn,
+      collaborative: isSwitchOn1,
+    });
+  };
 
   return (
     <View style={styles.container}>
@@ -54,37 +74,37 @@ const EventDetailsScreen = ({ route }) => {
           ).toLocaleTimeString("en-US")}
         </Text>
         <Divider />
-      </View>
-      <View style={{ marginBottom: 40 }}>
-        <View style={{ flexDirection: "row", marginTop: 30 }}>
-          <Text style={styles.toggleText}>transparency mode:</Text>
-          <Switch
-            value={isSwitchOn}
-            onValueChange={onToggleSwitch}
-            style={{ marginHorizontal: 10 }}
-          />
-        </View>
-        <View style={{ flexDirection: "row", marginTop: 30 }}>
-          <Text style={styles.toggleText}>collaborative mode:</Text>
-          <Switch
-            value={isSwitchOn1}
-            onValueChange={onToggleSwitch1}
-            style={{ marginHorizontal: 10 }}
-          />
-        </View>
-        <Button
-          mode="contained"
-          color="black"
-          uppercase={false}
-          style={{ marginTop: 30 }}
-          onPress={() => {
-            alert("sheesh");
-          }}
-        >
-          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-            confirm
-          </Text>
-        </Button>
+        {route.params.event.admins.includes(user.email) ? (
+          <View>
+            <View style={{ flexDirection: "row", marginTop: 30 }}>
+              <Text style={styles.toggleText}>transparency mode:</Text>
+              <Switch
+                value={isSwitchOn}
+                onValueChange={onToggleSwitch}
+                style={{ marginHorizontal: 10 }}
+              />
+            </View>
+            <View style={{ flexDirection: "row", marginTop: 30 }}>
+              <Text style={styles.toggleText}>collaborative mode:</Text>
+              <Switch
+                value={isSwitchOn1}
+                onValueChange={onToggleSwitch1}
+                style={{ marginHorizontal: 10 }}
+              />
+            </View>
+            <Button
+              mode="contained"
+              color="black"
+              uppercase={false}
+              style={{ marginTop: 30 }}
+              onPress={handleConfirm}
+            >
+              <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                confirm
+              </Text>
+            </Button>
+          </View>
+        ) : null}
       </View>
     </View>
   );

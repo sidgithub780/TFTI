@@ -22,7 +22,7 @@ import * as Clipboard from "expo-clipboard";
 const LeftContent = (props) => <Avatar.Icon {...props} icon="folder" />;
 
 const EventOptionsScreen = ({ route, navigation }) => {
-  const [value, setValue] = React.useState("maybe");
+  const [value, setValue] = React.useState("not attending");
 
   useEffect(() => {
     const load = async () => {
@@ -87,7 +87,10 @@ const EventOptionsScreen = ({ route, navigation }) => {
         </Button>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("EventDetails", { event: route.params.event });
+            navigation.navigate("EventDetails", {
+              event: route.params.event,
+              eventID: route.params.eventID,
+            });
           }}
         >
           <Card style={{ marginTop: 20, padding: 10 }}>

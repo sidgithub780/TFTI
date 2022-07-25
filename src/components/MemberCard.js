@@ -8,7 +8,7 @@ const MemberCard = (props) => {
     <Card style={{ marginTop: 20, padding: 10 }}>
       <Card.Title
         title={props.member.email}
-        subtitle={props.member.attending}
+        subtitle={props.transparent ? props.member.attending : null}
         left={LeftContent}
       />
     </Card>

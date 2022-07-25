@@ -16,6 +16,8 @@ import { AppStateContext } from "../context/Context";
 
 import React, { useState, useMemo } from "react";
 
+import { Ionicons } from "@expo/vector-icons";
+
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -32,7 +34,7 @@ const HomeToCreate = () => {
         component={CreateEventScreen}
         options={{
           headerTransparent: true,
-          headerBackTitle: "back",
+          headerBackTitle: "Back",
           headerTitle: "",
         }}
       />
@@ -41,7 +43,7 @@ const HomeToCreate = () => {
         component={EventOptionsScreen}
         options={{
           headerTransparent: true,
-          headerBackTitle: "back",
+          headerBackTitle: "Back",
           headerTitle: "",
         }}
       />
@@ -50,7 +52,7 @@ const HomeToCreate = () => {
         component={EventDetailsScreen}
         options={{
           headerTransparent: true,
-          headerBackTitle: "back",
+          headerBackTitle: "Back",
           headerTitle: "",
         }}
       />
@@ -59,7 +61,7 @@ const HomeToCreate = () => {
         component={EventMembersScreen}
         options={{
           headerTransparent: true,
-          headerBackTitle: "back",
+          headerBackTitle: "Back",
           headerTitle: "",
         }}
       />
@@ -76,7 +78,21 @@ const Navigator = () => {
     return (
       <Tab.Navigator
         initialRouteName="Home Tab"
-        screenOptions={{ tabBarColor: "transparent" }}
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === "Home Tab") {
+              iconName = focused ? "home" : "home-outline";
+            } else if (route.name === "Account") {
+              iconName = focused ? "person" : "person-outline";
+            }
+
+            // You can return any component that you like here!
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarColor: "transparent",
+        })}
       >
         <Tab.Screen
           name="Account"
