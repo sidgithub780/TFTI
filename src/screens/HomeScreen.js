@@ -5,12 +5,13 @@ import {
   ScrollView,
   TouchableOpacity,
   Modal,
+  RefreshControl,
 } from "react-native";
 import React, { useState, useContext, useEffect } from "react";
 
 import Screen from "../components/Screen";
 
-import { AppStateContext } from "../context/Context";
+import { AppStateContext, userFromDBContext } from "../context/Context";
 import { getDoc, doc, updateDoc } from "firebase/firestore";
 
 import { db } from "../firebase-config";
@@ -30,24 +31,27 @@ const HomeScreen = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [eventCode, setEventCode] = useState("");
   const [userEventIDs, setUserEventIDs] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const { user } = useContext(AppStateContext);
+  const { setUserFromDB1 } = useContext(userFromDBContext);
   //const usersCollectionRef = collection(db, "users");
 
   const reload = async () => {
-    setLoading(true);
+    setRefreshing(true);
     const docRef = doc(db, "users", user.email);
     const docSnap = await getDoc(docRef);
 
     setUserFromDB({});
-    setUserEvents([]);
-    setUserEventIDs([]);
 
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data());
+
       setUserFromDB(docSnap.data());
+
+      setUserEvents([]);
+      setUserEventIDs([]);
       docSnap.data().events.map(async (eventID) => {
-        console.log(eventID.trim());
         setUserEventIDs((current) => [...current, eventID.trim()]);
         const eventRef = doc(db, "events", eventID);
         const eventSnap = await getDoc(eventRef);
@@ -57,7 +61,7 @@ const HomeScreen = ({ navigation }) => {
       // doc.data() will be undefined in this case
       console.log("No such document!");
     }
-    setLoading(false);
+    setRefreshing(false);
   };
 
   const joinEvent = async () => {
@@ -67,14 +71,10 @@ const HomeScreen = ({ navigation }) => {
         const eventSnap = await getDoc(eventRef);
 
         if (eventSnap.data() !== undefined) {
-          console.log("members below");
-          console.log(eventSnap.data().members);
-
           const userRef = doc(db, "users", user.email);
 
           let currentEvents = userEventIDs;
-          console.log("currentevents");
-          console.log(currentEvents);
+
           currentEvents.push(eventCode.trim());
 
           let currentMembers = eventSnap.data().members;
@@ -105,8 +105,6 @@ const HomeScreen = ({ navigation }) => {
   };
 
   useEffect(() => {
-    console.log(user);
-    console.log(uuid.v4());
     const getUser = async () => {
       const docRef = doc(db, "users", user.email);
       const docSnap = await getDoc(docRef);
@@ -116,8 +114,8 @@ const HomeScreen = ({ navigation }) => {
 
         if (docSnap.data() !== undefined) {
           setUserFromDB(docSnap.data());
+
           docSnap.data().events.map(async (eventID) => {
-            console.log(eventID.trim());
             setUserEventIDs((current) => [...current, eventID.trim()]);
             const eventRef = doc(db, "events", eventID);
             const eventSnap = await getDoc(eventRef);
@@ -132,8 +130,6 @@ const HomeScreen = ({ navigation }) => {
     };
 
     getUser();
-    console.log("below is user from db");
-    console.log(userFromDB);
   }, []);
 
   return (
@@ -193,7 +189,10 @@ const HomeScreen = ({ navigation }) => {
           </View>
         </View>
       </Modal>
-      <View style={{ flexDirection: "row" }}>
+
+      {loading ? (
+        <ActivityIndicator animating={loading} />
+      ) : (
         <Text
           style={{
             fontFamily: "Axiforma-Bold",
@@ -202,15 +201,8 @@ const HomeScreen = ({ navigation }) => {
         >
           {userFromDB.firstName}'s events
         </Text>
-        <TouchableOpacity
-          style={{ marginHorizontal: 30 }}
-          onPress={async () => {
-            await reload();
-          }}
-        >
-          <Ionicons name="reload" size={30} />
-        </TouchableOpacity>
-      </View>
+      )}
+
       <View
         style={{
           flexDirection: "row",
@@ -250,13 +242,21 @@ const HomeScreen = ({ navigation }) => {
       </View>
       {loading ? <ActivityIndicator animated={loading} /> : null}
       {userEvents.length === 0 ? (
-        <View>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={reload} />
+          }
+        >
           <Text style={{ fontFamily: "Axiforma-Regular" }}>
             nothing to see here
           </Text>
-        </View>
+        </ScrollView>
       ) : (
-        <ScrollView>
+        <ScrollView
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={reload} />
+          }
+        >
           {userEvents.map((event) => {
             return (
               <TouchableOpacity

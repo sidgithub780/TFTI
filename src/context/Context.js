@@ -1,3 +1,6 @@
 import { createContext } from "react";
 
-export const AppStateContext = createContext(null);
+const AppStateContext = createContext(null);
+const userFromDBContext = createContext(null);
+
+export { AppStateContext, userFromDBContext };

@@ -31,7 +31,7 @@ const MyComponent = (props) => (
       },
     }}
   >
-    {props.event.members.map((member) => {
+    {props.event.members?.map((member) => {
       if (member.email === props.user.email) {
         if (member.attending === "attending") {
           return (

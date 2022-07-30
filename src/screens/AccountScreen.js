@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Screen from "../components/Screen";
 
@@ -8,8 +8,12 @@ import { auth } from "../firebase-config";
 
 import { Button } from "react-native-paper";
 
+import { userFromDBContext } from "../context/Context";
+
 const AccountScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+
+  const { userFromDB1 } = useContext(userFromDBContext);
 
   return (
     <Screen>
@@ -25,6 +29,7 @@ const AccountScreen = ({ navigation }) => {
       <Text style={{ fontFamily: "Axiforma-Regular", fontSize: 25 }}>
         welcome
       </Text>
+      <Text>{JSON.stringify(userFromDB1)}</Text>
       <Button
         mode="contained"
         color="black"

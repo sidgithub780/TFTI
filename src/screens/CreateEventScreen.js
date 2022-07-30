@@ -164,6 +164,7 @@ const CreateEventScreen = ({ route, navigation }) => {
               placeholder="Search"
               onPress={(data, details = null) => {
                 // 'details' is provided when fetchDetails = true
+
                 setEventLocation(data.description);
                 setModalVisible(false);
               }}
@@ -173,6 +174,20 @@ const CreateEventScreen = ({ route, navigation }) => {
               }}
               style={{ marginTop: 30 }}
             />
+
+            <Button
+              mode="contained"
+              color="black"
+              uppercase={false}
+              onPress={() => {
+                setModalVisible(false);
+              }}
+              style={{ marginHorizontal: 20, marginBottom: 30 }}
+            >
+              <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+                close
+              </Text>
+            </Button>
           </Modal>
         </View>
         <Button

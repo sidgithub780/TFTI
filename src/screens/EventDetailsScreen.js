@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Dimensions,
+  TouchableOpacity,
+} from "react-native";
 import React, { useState, useEffect, useContext } from "react";
 
 import Screen from "../components/Screen";
@@ -13,7 +19,9 @@ import { db } from "../firebase-config";
 
 import { AppStateContext } from "../context/Context";
 
-const EventDetailsScreen = ({ route }) => {
+import { Ionicons } from "@expo/vector-icons";
+
+const EventDetailsScreen = ({ route, navigation }) => {
   const { user } = useContext(AppStateContext);
 
   const [isSwitchOn, setIsSwitchOn] = React.useState(
@@ -37,9 +45,19 @@ const EventDetailsScreen = ({ route }) => {
   return (
     <View style={styles.container}>
       <View>
-        <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 25 }}>
-          event details
-        </Text>
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 25 }}>
+            event details
+          </Text>
+          <TouchableOpacity
+            style={{ marginHorizontal: 30 }}
+            onPress={() => {
+              navigation.navigate("EventEdit");
+            }}
+          >
+            <Ionicons name="pencil" size={25} />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.normalStyle}>{route.params.event.description}</Text>
         <Divider />
         <Text style={styles.normalStyle}>{route.params.event.location}</Text>

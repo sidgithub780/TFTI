@@ -7,12 +7,13 @@ import CreateEventScreen from "../screens/CreateEventScreen";
 import EventOptionsScreen from "../screens/EventOptionsScreen";
 import EventDetailsScreen from "../screens/EventDetailsScreen";
 import EventMembersScreen from "../screens/EventMembersScreen";
+import EventEditScreen from "../screens/EventEditScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import { NavigationContainer } from "@react-navigation/native";
 
-import { AppStateContext } from "../context/Context";
+import { AppStateContext, userFromDBContext } from "../context/Context";
 
 import React, { useState, useMemo } from "react";
 
@@ -57,6 +58,15 @@ const HomeToCreate = () => {
         }}
       />
       <Stack.Screen
+        name="EventEdit"
+        component={EventEditScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
         name="EventMembers"
         component={EventMembersScreen}
         options={{
@@ -73,6 +83,12 @@ const Navigator = () => {
   const [user, setUser] = useState(null);
 
   const value = useMemo(() => ({ user, setUser }), [user, setUser]);
+
+  const [userFromDB1, setUserFromDB1] = useState({});
+  const userFromDBValue = useMemo(
+    () => ({ userFromDB1, setUserFromDB1 }),
+    [userFromDB1, setUserFromDB1]
+  );
 
   const Main = () => {
     return (
@@ -109,32 +125,34 @@ const Navigator = () => {
   };
 
   return (
-    <AppStateContext.Provider value={value}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Landing Screen"
-            component={LandingScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Login Screen"
-            component={LoginScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Signup Screen"
-            component={SignupScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Home Screen"
-            component={Main}
-            options={{ headerShown: false, gestureEnabled: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AppStateContext.Provider>
+    <userFromDBContext.Provider value={userFromDBValue}>
+      <AppStateContext.Provider value={value}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Landing Screen"
+              component={LandingScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Login Screen"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Signup Screen"
+              component={SignupScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Home Screen"
+              component={Main}
+              options={{ headerShown: false, gestureEnabled: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AppStateContext.Provider>
+    </userFromDBContext.Provider>
   );
 };
 

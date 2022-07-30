@@ -7,9 +7,9 @@ import {
 } from "react-native";
 
 import Constants from "expo-constants";
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 
-import { AppStateContext } from "../context/Context";
+import { AppStateContext, userFromDBContext } from "../context/Context";
 
 import { onAuthStateChanged } from "firebase/auth";
 
@@ -18,17 +18,29 @@ import { auth } from "../firebase-config";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../firebase-config";
 
+import { ActivityIndicator } from "react-native-paper";
+
 const LandingScreen = ({ navigation }) => {
   const { setUser } = useContext(AppStateContext);
+  const { setUserFromDB1 } = useContext(userFromDBContext);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (currentUser) => {
+    const unsub = onAuthStateChanged(auth, async (currentUser) => {
+      setLoading(true);
       setUser(currentUser);
 
       if (currentUser) {
+        const docRef = doc(db, "users", currentUser.email);
+        const docSnap = await getDoc(docRef);
+
+        setUserFromDB1(docSnap.data());
         if (currentUser.emailVerified) {
+          setLoading(false);
           navigation.navigate("Home Screen");
         }
+      } else {
+        setLoading(false);
       }
     });
     return unsub;
@@ -43,6 +55,7 @@ const LandingScreen = ({ navigation }) => {
         </Text>
       </View>
       <View style={styles.buttonGroup}>
+        <ActivityIndicator animating={loading} />
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("Login Screen");
