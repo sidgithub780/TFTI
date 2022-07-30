@@ -43,14 +43,14 @@ const HomeScreen = ({ navigation }) => {
     const docSnap = await getDoc(docRef);
 
     setUserFromDB({});
+    setUserEvents([]);
+    setUserEventIDs([]);
 
     if (docSnap.exists()) {
       //console.log("Document data:", docSnap.data());
 
       setUserFromDB(docSnap.data());
 
-      setUserEvents([]);
-      setUserEventIDs([]);
       docSnap.data().events.map(async (eventID) => {
         setUserEventIDs((current) => [...current, eventID.trim()]);
         const eventRef = doc(db, "events", eventID);
@@ -77,6 +77,8 @@ const HomeScreen = ({ navigation }) => {
 
           currentEvents.push(eventCode.trim());
 
+          console.log(currentEvents);
+
           let currentMembers = eventSnap.data().members;
           currentMembers.push({ email: user.email, attending: "maybe" });
 
@@ -89,8 +91,11 @@ const HomeScreen = ({ navigation }) => {
           });
 
           setEventCode("");
-
+          /*
+          setUserEventIDs((current) => [...current, eventCode.trim()]);
           setUserEvents((current) => [...current, eventSnap.data()]);
+          */
+          reload();
         } else {
           alert("no event exists");
         }
