@@ -1,6 +1,6 @@
 import { Button, TextInput } from "react-native-paper";
 import React, { useState, useContext } from "react";
-import { StyleSheet, Text, TextInputComponent, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 import Screen from "../components/Screen";
 

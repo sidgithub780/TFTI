@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useContext } from "react";
 
 import Screen from "../components/Screen";
@@ -10,9 +10,11 @@ import { Button } from "react-native-paper";
 
 import { userFromDBContext } from "../context/Context";
 
-const AccountScreen = ({ navigation }) => {
-  const [loading, setLoading] = useState(false);
+import { Ionicons } from "@expo/vector-icons";
 
+import AccountNavigator from "../components/AccountNavigator";
+
+const AccountScreen = ({ navigation }) => {
   const { userFromDB1 } = useContext(userFromDBContext);
 
   return (
@@ -26,32 +28,38 @@ const AccountScreen = ({ navigation }) => {
       >
         welcome
       </Text>
-      <Text style={{ fontFamily: "Axiforma-Regular", fontSize: 25 }}>
-        welcome
+      <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 25 }}>
+        {userFromDB1.firstName}!
       </Text>
-      <Text>{JSON.stringify(userFromDB1)}</Text>
-      <Button
-        mode="contained"
-        color="black"
-        loading={loading}
-        style={{ marginTop: 15 }}
-        uppercase={false}
-        onPress={async () => {
-          setLoading(true);
-          await signOut(auth);
-          console.log("logged out");
-          setLoading(false);
-          navigation.navigate("Landing Screen");
+
+      <AccountNavigator
+        titleText="account"
+        onPress={() => {
+          navigation.navigate("Account Change");
         }}
-      >
-        <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-          sign out
-        </Text>
-      </Button>
+        iconName="person"
+      />
+      <AccountNavigator
+        titleText="about"
+        onPress={() => {
+          navigation.navigate("App About");
+        }}
+        iconName="information-circle-outline"
+      />
     </Screen>
   );
 };
 
 export default AccountScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rowStyle: {
+    justifyContent: "space-between",
+    flexDirection: "row",
+    borderRadius: 10,
+    padding: 15,
+    borderWidth: 1,
+    borderColor: "black",
+  },
+  touchableStyle: { marginVertical: 10 },
+});

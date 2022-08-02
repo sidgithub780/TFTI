@@ -8,6 +8,11 @@ import EventOptionsScreen from "../screens/EventOptionsScreen";
 import EventDetailsScreen from "../screens/EventDetailsScreen";
 import EventMembersScreen from "../screens/EventMembersScreen";
 import EventEditScreen from "../screens/EventEditScreen";
+import AccountChangeScreen from "../screens/AccountChangeScreen";
+import AppAboutScreen from "../screens/AppAboutScreen";
+import NameChange from "../screens/NameChange";
+import NoteChange from "../screens/NoteChange";
+import SocialChange from "../screens/SocialChange";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -90,6 +95,63 @@ const Navigator = () => {
     [userFromDB1, setUserFromDB1]
   );
 
+  const AccountStack = () => {
+    return (
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Account"
+          component={AccountScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Account Change"
+          component={AccountChangeScreen}
+          options={{
+            headerTransparent: true,
+            headerBackTitle: "Back",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="App About"
+          component={AppAboutScreen}
+          options={{
+            headerTransparent: true,
+            headerBackTitle: "Back",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="Name Change"
+          component={NameChange}
+          options={{
+            headerTransparent: true,
+            headerBackTitle: "Back",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="Note Change"
+          component={NoteChange}
+          options={{
+            headerTransparent: true,
+            headerBackTitle: "Back",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name="Social Change"
+          component={SocialChange}
+          options={{
+            headerTransparent: true,
+            headerBackTitle: "Back",
+            headerTitle: "",
+          }}
+        />
+      </Stack.Navigator>
+    );
+  };
+
   const Main = () => {
     return (
       <Tab.Navigator
@@ -100,7 +162,7 @@ const Navigator = () => {
 
             if (route.name === "Home Tab") {
               iconName = focused ? "home" : "home-outline";
-            } else if (route.name === "Account") {
+            } else if (route.name === "Account Tab") {
               iconName = focused ? "person" : "person-outline";
             }
 
@@ -111,8 +173,8 @@ const Navigator = () => {
         })}
       >
         <Tab.Screen
-          name="Account"
-          component={AccountScreen}
+          name="Account Tab"
+          component={AccountStack}
           options={{ headerShown: false }}
         />
         <Tab.Screen
