@@ -34,7 +34,7 @@ const HomeScreen = ({ navigation }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const { user } = useContext(AppStateContext);
-  const { setUserFromDB1 } = useContext(userFromDBContext);
+  const { userFromDB1 } = useContext(userFromDBContext);
   //const usersCollectionRef = collection(db, "users");
 
   const reload = async () => {
@@ -80,7 +80,12 @@ const HomeScreen = ({ navigation }) => {
           console.log(currentEvents);
 
           let currentMembers = eventSnap.data().members;
-          currentMembers.push({ email: user.email, attending: "maybe" });
+          currentMembers.push({
+            email: user.email,
+            attending: "maybe",
+            firstName: userFromDB1.firstName,
+            lastName: userFromDB1.lastName,
+          });
 
           await updateDoc(eventRef, {
             members: currentMembers,

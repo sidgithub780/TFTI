@@ -9,6 +9,10 @@ import { doc, getDoc } from "firebase/firestore";
 
 import { db } from "../firebase-config";
 
+import { Ionicons } from "@expo/vector-icons";
+
+import AccountNavigator from "../components/AccountNavigator";
+
 const ViewProfileScreen = ({ route }) => {
   const [loading, setLoading] = useState(true);
   const [allUserData, setAllUserData] = useState({});
@@ -18,7 +22,6 @@ const ViewProfileScreen = ({ route }) => {
       setLoading(true);
       const docRef = doc(db, "users", route.params.member.email);
       const docSnap = await getDoc(docRef);
-      console.log(docSnap.data());
       setAllUserData(docSnap.data());
       setLoading(false);
     };
@@ -28,13 +31,45 @@ const ViewProfileScreen = ({ route }) => {
 
   return (
     <Screen>
-      <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-        view accounts
-      </Text>
       {loading ? (
         <ActivityIndicator />
       ) : (
-        <Text>{JSON.stringify(allUserData)}</Text>
+        <View>
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            {allUserData.firstName} {allUserData.lastName}
+          </Text>
+          <Text style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
+            {allUserData.note}
+          </Text>
+
+          {allUserData.email !== null && allUserData.email !== "" ? (
+            <AccountNavigator titleText={allUserData.email} iconName="mail" />
+          ) : null}
+
+          {allUserData.phoneNumber !== null &&
+          allUserData.phoneNumber !== "" ? (
+            <AccountNavigator
+              titleText={allUserData.phoneNumber}
+              iconName="call"
+            />
+          ) : null}
+          {allUserData.instagram !== null && allUserData.instagram !== "" ? (
+            <AccountNavigator
+              titleText={allUserData.instagram}
+              iconName="logo-instagram"
+            />
+          ) : null}
+          {allUserData.discord !== null && allUserData.discord !== "" ? (
+            <AccountNavigator
+              titleText={allUserData.discord}
+              iconName="people-circle-outline"
+            />
+          ) : null}
+
+          <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
+            mutual events
+          </Text>
+        </View>
       )}
     </Screen>
   );
@@ -42,4 +77,6 @@ const ViewProfileScreen = ({ route }) => {
 
 export default ViewProfileScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  normalText: { fontSize: 20, fontFamily: "Axiforma-Regular" },
+});

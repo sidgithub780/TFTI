@@ -330,7 +330,12 @@ const CreateEventScreen = ({ route, navigation }) => {
                 collaborative: false,
                 proposals: [],
                 members: [
-                  { email: route.params.user.email, attending: "attending" },
+                  {
+                    email: route.params.user.email,
+                    attending: "attending",
+                    firstName: route.params.user.firstName,
+                    lastName: route.params.user.lastName,
+                  },
                 ],
                 admins: [route.params.user.email],
               });

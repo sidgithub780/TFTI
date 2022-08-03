@@ -9,7 +9,7 @@ const MemberCard = (props) => {
     <TouchableOpacity onPress={props.onPress}>
       <Card style={{ marginTop: 20, padding: 10 }}>
         <Card.Title
-          title={props.member.email}
+          title={props.member.firstName + " " + props.member.lastName}
           subtitle={props.transparent ? props.member.attending : null}
           left={LeftContent}
         />

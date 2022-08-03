@@ -27,7 +27,10 @@ const EventMembersScreen = ({ route, navigation }) => {
             member={member}
             transparent={route.params.event.transparent}
             onPress={() => {
-              navigation.navigate("View Profile", { member: member });
+              navigation.navigate("View Profile", {
+                member: member,
+                event: route.params.event,
+              });
             }}
           />
         );
