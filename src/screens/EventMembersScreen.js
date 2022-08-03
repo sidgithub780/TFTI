@@ -9,7 +9,7 @@ import MemberCard from "../components/MemberCard";
 
 const LeftContent = (props) => <Avatar.Icon {...props} icon="account" />;
 
-const EventMembersScreen = ({ route }) => {
+const EventMembersScreen = ({ route, navigation }) => {
   return (
     <Screen>
       <Text
@@ -26,6 +26,9 @@ const EventMembersScreen = ({ route }) => {
           <MemberCard
             member={member}
             transparent={route.params.event.transparent}
+            onPress={() => {
+              navigation.navigate("View Profile", { member: member });
+            }}
           />
         );
       })}

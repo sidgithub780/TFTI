@@ -38,6 +38,9 @@ const SignupScreen = ({ navigation }) => {
       lastName: lastName.toLowerCase(),
       note: "",
       events: [],
+      phoneNumber: null,
+      instagram: "",
+      discord: "",
     });
   };
 

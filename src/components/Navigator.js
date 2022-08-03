@@ -13,6 +13,7 @@ import AppAboutScreen from "../screens/AppAboutScreen";
 import NameChange from "../screens/NameChange";
 import NoteChange from "../screens/NoteChange";
 import SocialChange from "../screens/SocialChange";
+import ViewProfileScreen from "../screens/ViewProfileScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -74,6 +75,15 @@ const HomeToCreate = () => {
       <Stack.Screen
         name="EventMembers"
         component={EventMembersScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="View Profile"
+        component={ViewProfileScreen}
         options={{
           headerTransparent: true,
           headerBackTitle: "Back",

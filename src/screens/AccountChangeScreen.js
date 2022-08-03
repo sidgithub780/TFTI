@@ -37,6 +37,7 @@ const AccountChangeScreen = ({ navigation }) => {
             navigation.navigate("Note Change");
           }}
           iconName="document-outline"
+          arrowVal="..."
         />
         <AccountNavigator
           titleText="socials"
