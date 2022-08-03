@@ -29,7 +29,7 @@ const ViewProfileScreen = ({ route }) => {
   return (
     <Screen>
       <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-        view account
+        view accounts
       </Text>
       {loading ? (
         <ActivityIndicator />
