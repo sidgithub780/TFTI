@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Dimensions } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Screen from "../components/Screen";
 
@@ -12,8 +12,11 @@ import AccountNavigator from "../components/AccountNavigator";
 
 import Constants from "expo-constants";
 
+import { userFromDBContext } from "../context/Context";
+
 const AccountChangeScreen = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  const { userFromDB1 } = useContext(userFromDBContext);
   return (
     <View style={styles.container}>
       <View>
@@ -26,9 +29,10 @@ const AccountChangeScreen = ({ navigation }) => {
             navigation.navigate("Name Change");
           }}
           iconName="person"
+          arrowVal={userFromDB1.firstName + " " + userFromDB1.lastName}
         />
         <AccountNavigator
-          titleText="note"
+          titleText="bio"
           onPress={() => {
             navigation.navigate("Note Change");
           }}

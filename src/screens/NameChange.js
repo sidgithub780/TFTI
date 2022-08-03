@@ -85,6 +85,9 @@ const NameChange = ({ navigation }) => {
           color="white"
           style={{ width: "40%" }}
           uppercase={false}
+          onPress={() => {
+            navigation.navigate("Account Change");
+          }}
         >
           <Ionicons name="play-back-outline" size={20} />
         </Button>
@@ -101,7 +104,16 @@ const NameChange = ({ navigation }) => {
             console.log("got userref");
 
             await handleSubmit();
-            setUserFromDB1({ firstName: firstName, lastName: lastName });
+            let email = userFromDB1.email;
+            let events = userFromDB1.events;
+            let note = userFromDB1.note;
+            setUserFromDB1({
+              email: email,
+              events: events,
+              note: note,
+              firstName: firstName,
+              lastName: lastName,
+            });
 
             navigation.navigate("Account Change");
           }}

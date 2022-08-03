@@ -2,6 +2,10 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
+const limit = (string, limit) => {
+  return string.substring(0, limit);
+};
+
 const AccountNavigator = (props) => {
   return (
     <TouchableOpacity style={styles.touchableStyle} onPress={props.onPress}>
@@ -12,7 +16,12 @@ const AccountNavigator = (props) => {
             {props.titleText}
           </Text>
         </View>
-        <Ionicons name="chevron-forward-outline" />
+        <View style={{ flexDirection: "row" }}>
+          <Text style={{ fontFamily: "Axiforma-Regular", color: "gray" }}>
+            {props.arrowVal}
+          </Text>
+          <Ionicons name="chevron-forward-outline" size={15} />
+        </View>
       </View>
     </TouchableOpacity>
   );
