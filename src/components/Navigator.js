@@ -14,6 +14,9 @@ import NameChange from "../screens/NameChange";
 import NoteChange from "../screens/NoteChange";
 import SocialChange from "../screens/SocialChange";
 import ViewProfileScreen from "../screens/ViewProfileScreen";
+import EventDescriptionChange from "../screens/EventDescriptionChange";
+import EventNameChange from "../screens/EventNameChange";
+import EventTimeChange from "../screens/EventTimeChange";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -66,6 +69,33 @@ const HomeToCreate = () => {
       <Stack.Screen
         name="EventEdit"
         component={EventEditScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="Event Name Change"
+        component={EventNameChange}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="Event Description Change"
+        component={EventDescriptionChange}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="Event Time Change"
+        component={EventTimeChange}
         options={{
           headerTransparent: true,
           headerBackTitle: "Back",

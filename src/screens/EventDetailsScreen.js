@@ -52,7 +52,10 @@ const EventDetailsScreen = ({ route, navigation }) => {
           <TouchableOpacity
             style={{ marginHorizontal: 30 }}
             onPress={() => {
-              navigation.navigate("EventEdit");
+              navigation.navigate("EventEdit", {
+                event: route.params.event,
+                eventID: route.params.eventID,
+              });
             }}
           >
             <Ionicons name="pencil" size={25} />
