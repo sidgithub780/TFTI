@@ -17,6 +17,7 @@ import ViewProfileScreen from "../screens/ViewProfileScreen";
 import EventDescriptionChange from "../screens/EventDescriptionChange";
 import EventNameChange from "../screens/EventNameChange";
 import EventTimeChange from "../screens/EventTimeChange";
+import ChooseEventLocation from "../screens/ChooseEventLocation";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -42,6 +43,15 @@ const HomeToCreate = () => {
       <Stack.Screen
         name="Create"
         component={CreateEventScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="ChooseEventLocation"
+        component={ChooseEventLocation}
         options={{
           headerTransparent: true,
           headerBackTitle: "Back",

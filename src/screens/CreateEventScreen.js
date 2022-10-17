@@ -67,6 +67,10 @@ const CreateEventScreen = ({ route, navigation }) => {
     showMode("time", currentSelection);
   };
 
+  const refreshLocation = (location) => {
+    setEventLocation(location);
+  };
+
   return (
     <ScrollView>
       <Screen>
@@ -152,54 +156,15 @@ const CreateEventScreen = ({ route, navigation }) => {
           >
             event location: {eventLocation}
           </Text>
-
-          <Modal
-            presentationStyle="pageSheet"
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-            style={{ backgroundColor: "black" }}
-            animationType="slide"
-          >
-            <GooglePlacesAutocomplete
-              placeholder="Search"
-              onPress={(data, details = null) => {
-                // 'details' is provided when fetchDetails = true
-
-                setEventLocation(data.description);
-                setModalVisible(false);
-              }}
-              query={{
-                key: "AIzaSyCjFx3bl1QEtoFoVF1zs0asjwDyKpuPJCI",
-                language: "en",
-              }}
-              style={{ marginTop: 30 }}
-            />
-
-            <Button
-              mode="contained"
-              color="black"
-              uppercase={false}
-              onPress={() => {
-                setModalVisible(false);
-              }}
-              style={{ marginHorizontal: 20, marginBottom: 30 }}
-            >
-              <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
-                close
-              </Text>
-            </Button>
-          </Modal>
         </View>
         <Button
           mode="contained"
           color="black"
           uppercase={false}
-          onPress={async () => {
-            try {
-              setModalVisible(true);
-            } catch (e) {
-              console.log(e);
-            }
+          onPress={() => {
+            navigation.navigate("ChooseEventLocation", {
+              onGoBack: refreshLocation,
+            });
           }}
           style={{ marginHorizontal: 20, marginTop: 20 }}
         >
