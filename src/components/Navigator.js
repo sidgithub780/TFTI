@@ -249,12 +249,20 @@ const Navigator = () => {
             <Stack.Screen
               name="Login Screen"
               component={LoginScreen}
-              options={{ headerShown: false }}
+              options={{
+                headerTransparent: true,
+                headerBackTitle: "Back",
+                headerTitle: "",
+              }}
             />
             <Stack.Screen
               name="Signup Screen"
               component={SignupScreen}
-              options={{ headerShown: false }}
+              options={{
+                headerTransparent: true,
+                headerBackTitle: "Back",
+                headerTitle: "",
+              }}
             />
             <Stack.Screen
               name="Home Screen"
