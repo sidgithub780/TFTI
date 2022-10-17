@@ -3,7 +3,7 @@
     "name": "rsvper",
     "slug": "rsvper",
     "privacy": "public",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/tfti_logo.png",
     "userInterfaceStyle": "light",
@@ -19,7 +19,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.kumarsuite.tfti"
     },
     "android": {
       "adaptiveIcon": {
