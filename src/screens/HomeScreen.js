@@ -280,7 +280,7 @@ const HomeScreen = ({ navigation }) => {
               >
                 <MyComponent
                   event={event}
-                  user={userFromDB}
+                  user={user}
                   eventID={userEventIDs[userEvents.indexOf(event)]}
                 />
               </TouchableOpacity>
