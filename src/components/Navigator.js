@@ -18,6 +18,7 @@ import EventDescriptionChange from "../screens/EventDescriptionChange";
 import EventNameChange from "../screens/EventNameChange";
 import EventTimeChange from "../screens/EventTimeChange";
 import ChooseEventLocation from "../screens/ChooseEventLocation";
+import PhotoScreen from "../screens/PhotoScreen";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
 
@@ -61,6 +62,15 @@ const HomeToCreate = () => {
       <Stack.Screen
         name="EventOptions"
         component={EventOptionsScreen}
+        options={{
+          headerTransparent: true,
+          headerBackTitle: "Back",
+          headerTitle: "",
+        }}
+      />
+      <Stack.Screen
+        name="EventPhotos"
+        component={PhotoScreen}
         options={{
           headerTransparent: true,
           headerBackTitle: "Back",

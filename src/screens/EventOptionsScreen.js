@@ -114,27 +114,22 @@ const EventOptionsScreen = ({ route, navigation }) => {
             />
           </Card>
         </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("EventPhotos", { event: route.params.event });
+          }}
+        >
+          <Card style={{ marginTop: 20, padding: 10 }}>
+            <Card.Title
+              title="photos"
+              subtitle="view and add event photos"
+              left={LeftContent}
+            />
+          </Card>
+        </TouchableOpacity>
       </View>
 
       <View style={{ marginBottom: 0 }}>
-        <Text
-          style={{
-            fontFamily: "Axiforma-Bold",
-            fontSize: 25,
-            marginBottom: 20,
-          }}
-        >
-          change attendance status
-        </Text>
-        <Text
-          style={{
-            fontFamily: "Axiforma-Regular",
-            fontSize: 15,
-            marginBottom: 20,
-          }}
-        >
-          currently selected: {value}
-        </Text>
         <ButtonToggleGroup
           highlightBackgroundColor={"#5626CE"}
           highlightTextColor={"white"}
@@ -148,7 +143,7 @@ const EventOptionsScreen = ({ route, navigation }) => {
             borderColor: "gray",
             borderRadius: 10,
             padding: 5,
-            height: "20%",
+            height: "25%",
           }}
           textStyle={{ fontFamily: "Axiforma-Regular" }}
         />
