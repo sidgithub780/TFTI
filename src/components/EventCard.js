@@ -68,7 +68,7 @@ const MyComponent = (props) => (
       <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
         {props.event?.description}
       </Title>
-      {props.event?.transparency ? (
+      {props.event?.transparent ? (
         <Title style={{ fontFamily: "Axiforma-Regular", fontSize: 15 }}>
           Transparent
         </Title>
