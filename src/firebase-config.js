@@ -5,6 +5,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 import { useEffect, useState } from "react";
 
@@ -24,3 +25,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const storage = getStorage(app);

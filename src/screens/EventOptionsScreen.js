@@ -129,7 +129,7 @@ const EventOptionsScreen = ({ route, navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View style={{ marginBottom: 0 }}>
+      <View>
         <ButtonToggleGroup
           highlightBackgroundColor={"#5626CE"}
           highlightTextColor={"white"}
@@ -151,7 +151,7 @@ const EventOptionsScreen = ({ route, navigation }) => {
           mode="contained"
           color="black"
           uppercase={false}
-          style={{ marginHorizontal: 5, marginTop: 25 }}
+          style={{ marginHorizontal: 5, marginTop: 15 }}
           onPress={confirmSelection}
         >
           <Text style={{ fontFamily: "Axiforma-Bold", fontSize: 20 }}>
