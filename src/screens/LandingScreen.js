@@ -21,6 +21,7 @@ import { db } from "../firebase-config";
 import { ActivityIndicator } from "react-native-paper";
 
 const LandingScreen = ({ navigation }) => {
+  //final commit before CAC
   const { setUser } = useContext(AppStateContext);
   const { setUserFromDB1 } = useContext(userFromDBContext);
   const [loading, setLoading] = useState(false);
